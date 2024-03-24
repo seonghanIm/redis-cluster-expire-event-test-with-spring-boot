@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  redis-master1:
+    image: bitnami/redis:latest
+    ports:
+      - "7001:6379"
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
+    volumes:
+      - ./nodes.conf:/data/nodes.conf
+
+  redis-master2:
+    image: bitnami/redis:latest
+    ports:
+      - "7002:6379"
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
+    volumes:
+      - ./nodes.conf:/data/nodes.conf
+
+  redis-master3:
+    image: bitnami/redis:latest
+    ports:
+      - "7003:6379"
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379
+    volumes:
+      - ./nodes.conf:/data/nodes.conf
+
+  redis-slave1:
+    image: bitnami/redis:latest
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379 --slaveof redis-master1 6379
+    volumes:
+      - ./nodes.conf:/data/nodes.conf
+
+  redis-slave2:
+    image: bitnami/redis:latest
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379 --slaveof redis-master2 6379
+    volumes:
+      - ./nodes.conf:/data/nodes.conf
+
+  redis-slave3:
+    image: bitnami/redis:latest
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --port 6379 --slaveof redis-master3 6379
+    volumes:
+      - ./nodes.conf:/data/nodes.conf
